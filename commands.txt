@@ -1,0 +1,50 @@
+- Create Kafka topic
+kafka-topics --create --topic firstTopic --partitions 1 --replication-factor 1 --bootstrap-server localhost:9092
+kafka-topics --create --topic Amor --partitions 4 --replication-factor 2 --bootstrap-server localhost:9091,localhost:9092,localhost:9093
+kafka-topics --create --topic No_replication --partitions 4 --replication-factor 1 --bootstrap-server localhost:9091,localhost:9092,localhost:9093
+kafka-topics --create --topic replication --partitions 4 --replication-factor 3 --bootstrap-server kafka:9091,kafka-1:9092,kafka-2:9093
+
+
+- produce console messages
+kafka-console-producer --topic firstTopic --bootstrap-server localhost:9092
+kafka-console-producer --topic Amor --bootstrap-server localhost:9091,localhost:9092,localhost:9093
+kafka-console-producer --topic No_replication --bootstrap-server kafka:9091,kafka-1:9092,kafka-2:9093
+kafka-console-producer --topic replication --bootstrap-server kafka:9091,kafka-1:9092,kafka-2:9093
+
+
+- producing messages to partitions based on keys
+kafka-console-producer --topic replication --bootstrap-server kafka:9091,kafka-1:9092,kafka-2:9093 --property "parse.key=true" --property "key.separator=:"
+
+
+
+-  consume console messages
+kafka-console-consumer --topic firstTopic --bootstrap-server localhost:9092 --from-beginning
+kafka-console-consumer --topic topic1 --bootstrap-server kafka:9091,kafka-1:9092,kafka-2:9093 --from-beginning
+kafka-console-consumer --topic No_replication --bootstrap-server kafka:9091,kafka-1:9092,kafka-2:9093 --from-beginning
+kafka-console-consumer --topic replication --bootstrap-server kafka:9091,kafka-1:9092,kafka-2:9093 --from-beginning
+
+- consume based on partition
+kafka-console-consumer --topic Amor --partition 0 --bootstrap-server kafka:9091,kafka-1:9092,kafka-2:9093  --from-beginning
+kafka-console-consumer --topic No_replication --partition 0 --bootstrap-server kafka:9091,kafka-1:9092,kafka-2:9093  --from-beginning
+kafka-console-consumer --topic replication --partition 0 --bootstrap-server kafka:9091,kafka-1:9092,kafka-2:9093  --from-beginning
+
+- multiple brokers
+kafka-topics --create --topic topic1 --partitions 6 --replication-factor 1 --bootstrap-server kafka:9091,kafka-1:9092,kafka-2:9093
+
+
+-describe a topic
+kafka-topics --describe --topic firstTopic --bootstrap-server kafka-1:9092
+kafka-topics --describe --topic Amor --bootstrap-server localhost:9091,localhost:9092,localhost:9093
+kafka-topics --describe --topic No_replication --bootstrap-server kafka:9091,kafka-1:9092,kafka-2:9093
+kafka-topics --describe --topic replication --bootstrap-server kafka:9091,kafka-1:9092,kafka-2:9093
+
+
+- delete a topic
+kafka-topics --delete --topic topic1 --zookeeper zookeeper:2181
+kafka-topics --delete --topic topic1 --bootstrap-server kafka-1:9092
+kafka-topics --delete --topic replication --bootstrap-server kafka:9091,kafka-1:9092,kafka-2:9093
+
+
+
+
+
